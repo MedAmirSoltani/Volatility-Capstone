@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Prevent scrolling */
+            background-color: black;
+        }
+        img {
+            /* Make the image cover the entire viewport */
+            height: 100%;
+            width: 100%;
+            
+            /* Center the image */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            
+            /* Preserve aspect ratio */
+        }
+    </style>
+</head>
+<body>
+    <img src="{% static 'images/loading.gif' %}" alt="Loading...">
+    <script>
+        setTimeout(function() {
+            window.location.href = "{% url 'home' %}";
+        }, 5000); // Adjust time as needed
+    </script>
+</body>
+</html>

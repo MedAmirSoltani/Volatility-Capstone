@@ -1,0 +1,703 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<style>
+  /* Add this CSS to style the dropdown menu */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* CSS for dropdown button */
+  .dropdown-btn {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-transform: capitalize;
+    /* Capitalize the first letter of the name */
+    display: flex;
+    align-items: center;
+  }
+
+  .dropdown-btn:hover,
+  .dropdown-btn:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Lighten the background color on hover */
+  }
+
+  /* CSS for dropdown content */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    /* Background color of the dropdown content */
+    min-width: 160px;
+    z-index: 1;
+  }
+
+  .dropdown-content a {
+    color: #fff;
+    /* Text color of the links */
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #555;
+    /* Darken the background color of the link on hover */
+  }
+
+  /* Show the dropdown content when the dropdown button is hovered over */
+  .dropdown:hover .dropdown-content {
+    display: block;
+
+  }
+
+  /* CSS for login button */
+  .login-btn {
+    background-color: #0056b3;
+    /* Background color of the button */
+    color: #fff;
+    /* Text color of the button */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    /* Smooth transition for hover effect */
+  }
+
+  .login-btn:hover {
+    background-color: #0056b3;
+    /* Darker background color on hover */
+  }
+
+  .login-btn:focus {
+    outline: none;
+    /* Remove the default focus outline */
+  }
+</style>
+<!-- Link to Font Awesome CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!-- Link to custom CSS file -->
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>InfiniTrade</title>
+
+  <!-- slider stylesheet -->
+  <!-- slider stylesheet -->
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet" />
+  <!-- Custom styles for this template -->
+  <link href=" {% static 'css/style.css' %}" rel="stylesheet" />
+
+  <!-- responsive style -->
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+</head>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<body>
+  <div>
+    <!-- Header section starts -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+          <li class="nav-item dropdown">
+            <!-- Dropdown menu for user authentication -->
+            {% if user.is_authenticated %}
+            <div class="dropdown">
+                <button class="dropdown-btn">Welcome, {{ user.first_name }} <i class="fas fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                  <a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a>
+                  <a href="{% url 'update_preferences' %}"><i class="fas fa-cog"></i> Preferences</a>
+<form id="logout-form" action="{% url 'logout' %}" method="post" style="display: inline;">
+    {% csrf_token %}
+    <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</form>                </div>
+            </div>
+            {% else %}
+            <a class="nav-link login-btn" href="{% url 'login' %}">Login</a>
+            {% endif %}
+          </li>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="d-flex ml-auto flex-column flex-lg-row align-items-center">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item ">
+                  <a class="nav-link" href="{% url 'about' %}"> <i class="fas fa-info-circle"></i> About </a>
+                </li>
+                <li class="nav-item">
+                  {% if user.is_authenticated %}
+                  <a class="nav-link" href="{% url 'sentiment_analysis' %}"> <i class="fas fa-comments"></i> News </a>
+                  {% else %}
+                  <a class="nav-link" href="{% url 'login' %}"> <i class="fas fa-comments"></i> News </a>
+                  {% endif %}
+                </li>
+                <li class="nav-item active">
+                  {% if user.is_authenticated %}
+                  <a class="nav-link active" href="{% url 'how' %}"> <i class="fas fa-play-circle"></i> Get Started </a>
+                  {% else %}
+                  <a class="nav-link active" href="{% url 'login' %}"> <i class="fas fa-play-circle"></i> Get Started </a>
+                  {% endif %}
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link"> <i class="fas fa-money-bill-wave"></i> Available Funds: {{ user.preferences.available_funds }} € </a>
+                </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+
+
+
+
+
+
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Market Insights</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f8f9fa;
+                color: #343a40;
+            }
+            .container_add {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+            h1 {
+                color: #343a40;
+                margin-top: 0;
+                text-align: center;
+                font-size: 36px;
+            }
+            h2 {
+                color: #343a40;
+                margin-top: 30px;
+                margin-bottom: 15px;
+                font-size: 24px;
+            }
+    
+ 
+            .chart {
+                margin-top: 30px;
+                text-align: center;
+            }
+            .sentiment {
+                margin-top: 30px;
+                text-align: center;
+            }
+    
+            .sentiment h2 {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+    
+            .sentiment p {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+    
+            .positive {
+                color: #28a745;
+            }
+    
+            .neutral {
+                color: #6c757d;
+            }
+    
+            .negative {
+                color: #dc3545;
+            }
+            .forum-actions {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .forum-actions a {
+            text-decoration: none;
+            color: #fff;
+            background-color: #2fa84a;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+        .forum-actions a:hover {
+            background-color: #66d07d;
+        }
+        /* Style for sector detail buttons */
+.sector-buttons {
+  margin-bottom: 20px;
+   /* Adjust margin as needed */
+}
+
+.index-metrics {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.metric {
+    flex: 1 1 200px;
+    max-width: 250px;
+    text-align: center;
+    background-color: #e6f0fa;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+}
+
+.metric:hover {
+    transform: translateY(-4px);
+}
+
+.metric-value {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    color: #0056b3;
+    margin-bottom: 6px;
+}
+
+.metric-label {
+    display: block;
+    color: #333;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.tunindex-container {
+    background-color: #f0f2f5; /* Light gray background for subtle contrast */
+    border-left: 5px solid #0056b3; /* Blue accent border on the left */
+    padding: 20px; /* Padding for space inside the container */
+    border-radius: 8px; /* Rounded corners for a modern look */
+    margin: 20px 0; /* Space around the container */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Soft shadow for depth */
+}
+
+.tunindex-title {
+    font-size: 18px; /* Larger text for the title */
+    color: #0056b3; /* Blue text to match the border */
+    margin-bottom: 10px; /* Space between title and content */
+    font-weight: 500; /* Medium font weight for emphasis */
+}
+
+.tunindex-text {
+    font-size: 16px; /* Standard readable font size */
+    line-height: 1.5; /* Adequate line height for readability */
+    color: #333; /* Dark grey text for better readability */
+    text-align: justify; /* Justified text for a clean look */
+}
+form {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 50px;
+            padding: 5px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 7px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        </style>
+    </head>
+    <br>
+    <body>
+      <div class="container_add">
+        <h1 style="color:#0056b3; text-align:center;">
+          <i class="fas fa-chart-line"></i> Volatility Analysis
+      </h1>
+                
+<div class="tunindex-container">
+  <div class="tunindex-title">About Volatility</div>
+  <p class="tunindex-text">
+    Volatility measures the degree of variation in asset prices over time, often reflecting market uncertainty or investor sentiment. In financial markets, higher volatility typically signals larger price swings and increased risk. Monitoring volatility helps traders and analysts assess market stability, identify trends, and develop strategies for risk management and prediction.
+  </p>
+</div>
+           <br>  
+                        <!-- Some key metrics about the index -->
+<div class="index-metrics">
+    <div class="metric">
+        <span class="metric-value">{{ open_price }}</span>
+        <span class="metric-label">Open Price</span>
+    </div>
+    <div class="metric">
+        <span class="metric-value">{{ close_price }}</span>
+        <span class="metric-label">Close Price</span>
+    </div>
+    <div class="metric">
+        <span class="metric-value">{{ tick_volume }}</span>
+        <span class="metric-label">Volume</span>
+    </div>
+</div>
+
+              <br>  
+<!-- Add dropdown to choose chart style and checkboxes for metrics -->
+<style>
+    #plot-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .plot-option-label {
+        font-weight: bold;
+        color: #0056b3;
+    }
+
+
+    .metrics-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  background: #e6f0fa;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.metric-toggle label {
+  margin-right: 15px;
+  font-weight: 500;
+  color: #0056b3;
+}
+
+.chart-select select {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+</style>
+
+
+<div class="metrics-controls">
+  <div class="metric-toggle">
+    <label><input type="checkbox" id="toggleMA" checked> MA (8)</label>
+    <label><input type="checkbox" id="toggleEWMA"> EWMA (α=0.2)</label>
+    <label><input type="checkbox" id="toggleMin"> Rolling Min</label>
+    <label><input type="checkbox" id="toggleMax"> Rolling Max</label>
+  </div>
+
+<style>
+
+  .chart-select label {
+      font-weight: bold;
+      color: #0056b3;
+      font-size: 15px;
+  }
+
+  .chart-select select {
+      padding: 6px 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: #0056b3;
+      font-weight: 600;
+      transition: border 0.3s;
+  }
+
+  .chart-select select:focus {
+      outline: none;
+      border-color: #0056b3;
+      box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
+  }
+</style>
+<div class="chart-select">
+    <label for="chartType">Chart Type:</label>
+    <select id="chartType">
+        <option value="lines" selected>Lines</option>
+        <option value="markers">Markers</option>
+        <option value="lines+markers">Both</option>
+    </select>
+</div>
+
+
+</div>
+
+<div id="plotly-chart"></div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    const chartData = JSON.parse(`{{ plotly_chart|safe }}`);
+
+    const actualVolatility = chartData.data.find(trace => trace.name === "Actual Volatility");
+    const time = actualVolatility.x;
+    const volatility = actualVolatility.y;
+
+    // Helper functions
+    function computeMovingAverage(arr, window) {
+        return arr.map((_, i) =>
+            i < window - 1 ? null : arr.slice(i - window + 1, i + 1).reduce((a, b) => a + b, 0) / window
+        );
+    }
+
+    function computeEWMA(arr, alpha = 0.2) {
+        const ewma = [arr[0]];
+        for (let i = 1; i < arr.length; i++) {
+            ewma.push(alpha * arr[i] + (1 - alpha) * ewma[i - 1]);
+        }
+        return ewma;
+    }
+
+    function computeRollingMin(arr, window = 8) {
+        return arr.map((_, i) =>
+            i < window ? null : Math.min(...arr.slice(i - window + 1, i + 1))
+        );
+    }
+
+    function computeRollingMax(arr, window = 8) {
+        return arr.map((_, i) =>
+            i < window ? null : Math.max(...arr.slice(i - window + 1, i + 1))
+        );
+    }
+
+    function computeBollinger(arr, window = 8) {
+        const ma = computeMovingAverage(arr, window);
+        const std = arr.map((_, i) => {
+            if (i < window - 1) return null;
+            const slice = arr.slice(i - window + 1, i + 1);
+            const mean = ma[i];
+            const variance = slice.reduce((sum, val) => sum + (val - mean) ** 2, 0) / window;
+            return Math.sqrt(variance);
+        });
+
+        return {
+            upper: ma.map((m, i) => (m == null || std[i] == null ? null : m + 2 * std[i])),
+            lower: ma.map((m, i) => (m == null || std[i] == null ? null : m - 2 * std[i]))
+        };
+    }
+
+actualVolatility.line.color = '#6c757d'; // New graphite gray
+
+chartData.data.find(t => t.name === 'Predicted Volatility (next 4h)').line.color = '#f39c12';
+
+const maTrace = {
+    x: time,
+    y: computeMovingAverage(volatility, 8),
+    mode: 'lines',
+    name: 'MA (8)',
+    line: { color: '#2ecc71', dash: 'dot' },
+    visible: true
+};
+
+const ewmaTrace = {
+    x: time,
+    y: computeEWMA(volatility),
+    mode: 'lines',
+    name: 'EWMA (α=0.2)',
+    line: { color: '#9b59b6', dash: 'dash' },
+    visible: false
+};
+
+const minTrace = {
+    x: time,
+    y: computeRollingMin(volatility),
+    mode: 'lines',
+    name: 'Rolling Min',
+    line: { color: '#e74c3c', dash: 'dot' },
+    visible: false
+};
+
+const maxTrace = {
+    x: time,
+    y: computeRollingMax(volatility),
+    mode: 'lines',
+    name: 'Rolling Max',
+    line: { color: '#1abc9c', dash: 'dot' },
+    visible: false
+};
+
+const boll = computeBollinger(volatility);
+const upperBoll = {
+    x: time,
+    y: boll.upper,
+    mode: 'lines',
+    name: 'Bollinger Upper',
+    line: { color: '#34495e', dash: 'dot' },
+    visible: false
+};
+const lowerBoll = {
+    x: time,
+    y: boll.lower,
+    mode: 'lines',
+    name: 'Bollinger Lower',
+    line: { color: '#95a5a6', dash: 'dot' },
+    visible: false
+};
+
+    // Push all indicators
+    chartData.data.push(maTrace, ewmaTrace, minTrace, maxTrace, upperBoll, lowerBoll);
+
+    // Layout tweaks
+    const layout = chartData.layout;
+    layout.legend = { orientation: "h", x: 0.1, y: -0.25 };
+    layout.margin = { t: 50, b: 90, l: 60, r: 30 };
+
+    Plotly.newPlot('plotly-chart', chartData.data, layout);
+
+    // Event listeners for toggles
+    document.getElementById('chartType').addEventListener('change', function () {
+        const newMode = this.value;
+        chartData.data.forEach(trace => {
+            if (trace.name.includes('Volatility') || trace.name.includes('Predicted')) {
+                trace.mode = newMode;
+            }
+        });
+        Plotly.react('plotly-chart', chartData.data, layout);
+    });
+
+    document.getElementById('toggleMA').addEventListener('change', function () {
+        chartData.data.find(t => t.name === 'MA (8)').visible = this.checked;
+        Plotly.react('plotly-chart', chartData.data, layout);
+    });
+
+    document.getElementById('toggleEWMA').addEventListener('change', function () {
+        chartData.data.find(t => t.name === 'EWMA (α=0.2)').visible = this.checked;
+        Plotly.react('plotly-chart', chartData.data, layout);
+    });
+
+    document.getElementById('toggleMin').addEventListener('change', function () {
+        chartData.data.find(t => t.name === 'Rolling Min').visible = this.checked;
+        Plotly.react('plotly-chart', chartData.data, layout);
+    });
+
+    document.getElementById('toggleMax').addEventListener('change', function () {
+        chartData.data.find(t => t.name === 'Rolling Max').visible = this.checked;
+        Plotly.react('plotly-chart', chartData.data, layout);
+    });
+
+    document.getElementById('toggleBoll').addEventListener('change', function () {
+        chartData.data.find(t => t.name === 'Bollinger Upper').visible = this.checked;
+        chartData.data.find(t => t.name === 'Bollinger Lower').visible = this.checked;
+        Plotly.react('plotly-chart', chartData.data, layout);
+    });
+</script>
+
+
+          <!-- Sentiment analysis section -->
+<!-- Sentiment analysis section -->
+<div class="sentiment">
+    <h2 style="color:#0056b3">News Sentiment Analysis <i class="far fa-newspaper"></i></h2>
+    <p>
+        <i class="far fa-thumbs-up positive"></i>
+        Positive Sentiment: {{ sentiment_summary.positive }}%
+    </p>
+    <p>
+        <i class="far fa-meh-blank neutral"></i>
+        Neutral Sentiment: {{ sentiment_summary.neutral }}%
+    </p>
+    <p>
+        <i class="far fa-thumbs-down negative"></i>
+        Negative Sentiment: {{ sentiment_summary.negative }}%
+    </p>
+    <div class="forum-actions">
+        <a href="{% url 'sentiment_analysis' %}" class="analysis-button">
+            <i class="fas fa-chart-line"></i> Detailed Analysis
+        </a>
+    </div>
+</div>
+
+      </div>
+  </body>
+  
+    </html>
+    <br>
+    {% include "footer.html" %}
+      <script type="text/javascript" src="  {% static 'js/jquery-3.4.1.min.js' %}
+  "></script>
+      <script type="text/javascript" src="  {% static 'js/bootstrap.js' %}
+  "></script>
+      <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+        </script>
+      <!-- owl carousel script 
+    -->
+      <script type="text/javascript">
+        $(".owl-carousel").owlCarousel({
+          loop: true,
+          margin: 0,
+          navText: [],
+          center: true,
+          autoplay: true,
+          autoplayHoverPause: true,
+          responsive: {
+            0: {
+              items: 1
+            },
+            1000: {
+              items: 3
+            }
+          }
+        });
+      </script>
+      <!-- end owl carousel script -->
+    </body>
+
+    </html>

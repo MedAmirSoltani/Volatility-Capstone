@@ -1,0 +1,271 @@
+{% load static %}
+
+<style>
+    .inf-footer-section ul {
+      margin: 0px;
+      padding: 0px;
+    }
+    .inf-footer-section {
+      background: #151414;
+      position: relative;
+    }
+    .inf-footer-section .inf-footer-cta {
+      border-bottom: 1px solid #373636;
+    }
+    .inf-footer-section .inf-single-cta i {
+      color: #0056b3;
+      font-size: 30px;
+      float: left;
+      margin-top: 8px;
+    }
+    .inf-footer-section .inf-cta-text {
+      padding-left: 15px;
+      display: inline-block;
+    }
+    .inf-footer-section .inf-cta-text h4 {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .inf-footer-section .inf-cta-text span {
+      color: #757575;
+      font-size: 15px;
+    }
+    .inf-footer-section .inf-footer-content {
+      position: relative;
+      z-index: 2;
+    }
+    .inf-footer-section .inf-footer-logo {
+      margin-bottom: 30px;
+    }
+    .inf-footer-section .inf-footer-logo img {
+      max-width: 200px;
+    }
+    .inf-footer-section .inf-footer-text p {
+      margin-bottom: 14px;
+      font-size: 14px;
+      color: #7e7e7e;
+      line-height: 28px;
+    }
+    .inf-footer-section .inf-footer-social-icon span {
+      color: #fff;
+      display: block;
+      font-size: 20px;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      margin-bottom: 20px;
+    }
+    .inf-footer-section .inf-footer-social-icon a {
+      color: #fff;
+      font-size: 16px;
+      margin-right: 15px;
+    }
+    .inf-footer-section .inf-footer-social-icon i {
+      height: 40px;
+      width: 40px;
+      text-align: center;
+      line-height: 38px;
+      border-radius: 50%;
+    }
+    .inf-footer-section .inf-facebook-bg{
+      background: #3B5998;
+    }
+    .inf-footer-section .inf-twitter-bg{
+      background: #55ACEE;
+    }
+    .inf-footer-section .inf-google-bg{
+      background: rgb(234, 99, 14);
+    }
+    .inf-footer-section .inf-footer-widget-heading h3 {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .inf-footer-section .inf-footer-widget-heading h3::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -15px;
+      height: 2px;
+      width: 50px;
+      background: #0056b3;
+    }
+    .inf-footer-section .inf-footer-widget ul li {
+      display: inline-block;
+      width: 50%;
+      margin-bottom: 12px;
+    }
+    .inf-footer-section .inf-footer-widget ul li a:hover{
+      color: #0056b3;
+    }
+    .inf-footer-section .inf-footer-widget ul li a {
+      color: #878787;
+      text-transform: capitalize;
+    }
+    .inf-footer-section .inf-subscribe-form {
+      position: relative;
+      overflow: hidden;
+    }
+    .inf-footer-section .inf-subscribe-form input {
+      width: 100%;
+      padding: 14px 28px;
+      background: #2E2E2E;
+      border: 1px solid #2E2E2E;
+      color: #fff;
+    }
+    .inf-footer-section .inf-subscribe-form button {
+      position: absolute;
+      right: 0;
+      background: #0056b3;
+      padding: 13px 20px;
+      border: 1px solid #0056b3;
+      top: 0;
+    }
+    .inf-footer-section .inf-subscribe-form button i {
+      color: #fff;
+      font-size: 22px;
+      transform: rotate(-6deg);
+    }
+    .inf-footer-section .inf-copyright-area{
+      background: #202020;
+      padding: 25px 0;
+    }
+    .inf-footer-section .inf-copyright-text p {
+      margin: 0;
+      font-size: 14px;
+      color: #878787;
+    }
+    .inf-footer-section .inf-copyright-text p a{
+      color: #0056b3;
+    }
+    .inf-footer-section .inf-footer-menu li {
+      display: inline-block;
+      margin-left: 20px;
+    }
+    .inf-footer-section .inf-footer-menu li:hover a{
+      color: #0056b3;
+    }
+    .inf-footer-section .inf-footer-menu li a {
+      font-size: 14px;
+      color: #878787;
+    }
+</style>
+<footer class="inf-footer-section">
+  <div class="container">
+      <div class="inf-footer-cta pt-5 pb-5">
+          <div class="row">
+              <div class="col-xl-4 col-md-4 mb-30">
+                  <div class="inf-single-cta">
+                      <i class="fas fa-map-marker-alt"></i>
+                      <div class="inf-cta-text">
+                          <h4>Find us</h4>
+                          <span>22 rue taher ben Achour AFH Beja</span>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-xl-4 col-md-4 mb-30">
+                  <div class="inf-single-cta">
+                      <i class="fas fa-phone"></i>
+                      <div class="inf-cta-text">
+                          <h4>Call us</h4>
+                          <span>+33625300569</span>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-xl-4 col-md-4 mb-30">
+                  <div class="inf-single-cta">
+                      <i class="far fa-envelope-open"></i>
+                      <div class="inf-cta-text">
+                          <h4>Mail us</h4>
+                          <span>med.amir.soltani@gmail.com</span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="inf-footer-content pt-5 pb-5">
+          <div class="row">
+              <div class="col-xl-4 col-lg-4 mb-50">
+                  <div class="inf-footer-widget">
+                      <div class="inf-footer-logo">
+                        <a href="{% url 'home' %}" style="display: inline-block; margin-left: 70px; margin-top: -50px; margin-bottom: -50px;">
+                          <img src="{% static 'images/infinitrade.png' %}" class="img-fluid" alt="logo" style="display: block;">
+                      </a>
+                                            </div>
+                      <div class="inf-footer-text">
+                          <p>Start trading now with our cutting-edge intelligent trading platform. Gain access to advanced and powerful trading tools to make informed investment decisions.</p>
+                      </div>
+                      <div class="inf-footer-social-icon">
+                          <span>Follow us</span>
+                          <a href="#"><i class="fab fa-facebook-f inf-facebook-bg"></i></a>
+                          <a href="#"><i class="fab fa-twitter inf-twitter-bg"></i></a>
+                          <a href="#"><i class="fab fa-google-plus-g inf-google-bg"></i></a>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
+                  <div class="inf-footer-widget">
+                      <div class="inf-footer-widget-heading">
+                          <h3>Useful Links</h3>
+                      </div>
+                      <ul>
+                          <li><a href="{% url 'home' %}">Home</a></li>
+                          <li><a href="{% url 'about' %}">about</a></li>
+                          <li><a href="{% url 'sentiment_analysis' %}">News</a></li>
+                          <li><a href="{% url 'dashboard' %}">dashboard</a></li>
+                          <li><a href="{% url 'how' %}">get started</a></li>
+                          <li><a href="{% url 'trading_strategies' %}">trading strategies</a></li>
+                          <li><a href="{% url 'market_insights' %}">market insights</a></li>
+                          <li><a href="{% url 'chat' %}">ArtSmart</a></li>
+
+                      </ul>
+                  </div>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
+                  <div class="inf-footer-widget">
+                      <div class="inf-footer-widget-heading">
+                          <h3>Subscribe</h3>
+                      </div>
+                      <div class="inf-footer-text mb-25">
+                          <p>Don’t miss to subscribe to our new feeds, kindly fill the form below.</p>
+                      </div>
+                      <div class="inf-subscribe-form">
+                          <form action="#">
+                              <input type="text" placeholder="Email Address">
+                              <button><i class="fab fa-telegram-plane"></i></button>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="inf-copyright-area">
+      <div class="container">
+          <div class="row">
+              <div class="col-xl-6 col-lg-6 text-center text-lg-left">
+                  <div class="inf-copyright-text">
+                      <p>Copyright &copy; 2024, All Right Reserved                     
+                        <a href="{% url 'home' %}"> By InfiniTrade </p>
+                 
+                  </div>
+              </div>
+              <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
+                  <div class="inf-footer-menu">
+                      <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'about' %}">about</a></li>
+                        <li><a href="{% url 'sentiment_analysis' %}">News</a></li>
+                        <li><a href="{% url 'how' %}">get started</a></li>
+
+                        <li><a href="{% url 'chat' %}">ArtSmart</a></li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</footer>

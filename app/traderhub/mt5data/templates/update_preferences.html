@@ -1,0 +1,351 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <style>
+    /* Add this CSS to style the dropdown menu */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  /* CSS for dropdown button */
+  .dropdown-btn {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-transform: capitalize; /* Capitalize the first letter of the name */
+    display: flex;
+    align-items: center;
+  }
+  
+  .dropdown-btn:hover,
+  .dropdown-btn:focus {
+    background-color: rgba(255, 255, 255, 0.1); /* Lighten the background color on hover */
+  }
+  
+  /* CSS for dropdown content */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #333; /* Background color of the dropdown content */
+    min-width: 160px;
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: #fff; /* Text color of the links */
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: #555; /* Darken the background color of the link on hover */
+  }
+  
+  /* Show the dropdown content when the dropdown button is hovered over */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  
+  }
+  /* CSS for login button */
+  .login-btn {
+    background-color: #0056b3; /* Background color of the button */
+    color: #fff; /* Text color of the button */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  }
+  
+  .login-btn:hover {
+    background-color: #0056b3; /* Darker background color on hover */
+  }
+  
+  .login-btn:focus {
+    outline: none; /* Remove the default focus outline */
+  }
+  .logo img {
+    height: 60px;
+
+
+}
+  
+  </style>
+     <!-- Link to Font Awesome CSS -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+     <!-- Link to custom CSS file -->
+     <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>InfiniTrade</title>
+
+  <!-- slider stylesheet -->
+  <!-- slider stylesheet -->
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet" />
+  <!-- Custom styles for this template -->
+  <link href=" {% static 'css/style.css' %}" rel="stylesheet" />
+ 
+  <!-- responsive style -->
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+</head> 
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<body>
+  <div>
+    <!-- Header section starts -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+          <li class="nav-item dropdown">
+            <!-- Dropdown menu for user authentication -->
+            {% if user.is_authenticated %}
+            <div class="dropdown">
+                <button class="dropdown-btn">Welcome, {{ user.first_name }} <i class="fas fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                  <a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a>
+                  <a href="{% url 'update_preferences' %}"><i class="fas fa-cog"></i> Preferences</a>
+<form id="logout-form" action="{% url 'logout' %}" method="post" style="display: inline;">
+    {% csrf_token %}
+    <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</form>                </div>
+            </div>
+            {% else %}
+            <a class="nav-link login-btn" href="{% url 'login' %}">Login</a>
+            {% endif %}
+          </li>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="d-flex ml-auto flex-column flex-lg-row align-items-center">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item ">
+                  <a class="nav-link" href="{% url 'about' %}"> <i class="fas fa-info-circle"></i> About </a>
+                </li>
+                <li class="nav-item">
+                  {% if user.is_authenticated %}
+                  <a class="nav-link" href="{% url 'sentiment_analysis' %}"> <i class="fas fa-comments"></i> News </a>
+                  {% else %}
+                  <a class="nav-link" href="{% url 'login' %}"> <i class="fas fa-comments"></i> News </a>
+                  {% endif %}
+                </li>
+                <li class="nav-item">
+                  {% if user.is_authenticated %}
+                  <a class="nav-link" href="{% url 'how' %}"> <i class="fas fa-play-circle"></i> Get Started </a>
+                  {% else %}
+                  <a class="nav-link" href="{% url 'login' %}"> <i class="fas fa-play-circle"></i> Get Started </a>
+                  {% endif %}
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link"> <i class="fas fa-money-bill-wave"></i> Available Funds: {{ user.preferences.available_funds }} € </a>
+                </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+
+
+
+
+
+
+
+
+
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <style>
+      /* Adding some custom styles */
+      body {
+          font-family: 'Arial', sans-serif;
+          background-color: #e6f0ff;
+          margin: 0;
+          padding: 0;
+      }
+      .container {
+        max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      }
+ 
+      h1 {
+          color: #0056b3;
+          font-size: 24px;
+      }
+      label {
+        display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #0056b3;
+      }
+      select, input {
+          width: 100%;
+          padding: 8px;
+          margin-top: 5px;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+      }
+      .our button {
+          background-color: #0056b3;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          display: block;
+          width: 100%;
+      }
+
+      .logo img {
+          max-width: 100px;
+      }
+  </style>
+</head>
+<body>
+  <div class="container">
+          <div class="logo">
+              <img src="{% static 'images/logo.png' %}" alt="Value Logo">
+          </div>
+          <center> <h1><i class="fas fa-cogs"></i> Update Your Preferences</h1>  </center>
+      <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+              <label for="risk_tolerance"><i class="fas fa-chart-line"></i> Risk Tolerance:</label>
+              <select name="risk_tolerance" id="risk_tolerance">
+                  {% for value, label in form.fields.risk_tolerance.choices %}
+                      <option value="{{ value }}" {% if form.instance.risk_tolerance == value %}selected{% endif %}>{{ label }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+          <div class="form-group">
+            <label for="knowledge_experience"><i class="fas fa-industry"></i> Sectors to Invest In:</label>
+            <select name="sectors" id="sectors">
+                {% for value, label in form.fields.sectors.choices %}
+                    <option value="{{ value }}" {% if form.instance.sectors == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+                <div class="form-group">
+                    <label for="investment_horizon"><i class="fas fa-hourglass-half"></i> Investment Horizon:</label>
+                    <select name="investment_horizon" id="investment_horizon">
+                        {% for value, label in form.fields.investment_horizon.choices %}
+                            <option value="{{ value }}" {% if form.instance.investment_horizon == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+               
+                <div class="form-group">
+                    <label for="investment_objective"><i class="fas fa-bullseye"></i> Investment Objective:</label>
+                    <select name="investment_objective" id="investment_objective">
+                        {% for value, label in form.fields.investment_objective.choices %}
+                            <option value="{{ value }}" {% if form.instance.investment_objective == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="knowledge_experience"><i class="fas fa-book"></i> Knowledge & Experience:</label>
+                    <select name="knowledge_experience" id="knowledge_experience">
+                        {% for value, label in form.fields.knowledge_experience.choices %}
+                            <option value="{{ value }}" {% if form.instance.knowledge_experience == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+
+         
+
+                <div class="form-group">
+                    <label for="available_funds"><i class="fas fa-money-bill"></i> Available Funds (€):</label>
+                    <input type="number" name="available_funds" id="available_funds" step="0.01" value="{{ form.instance.available_funds }}">
+                </div>
+                <div class="our">
+
+                <button style="background-color:#0056b3;"type="submit"><i class="fas fa-save"></i> Save Preferences</button>
+                </div>
+                <center ><img src="{% static 'images/infinitrade.png' %}" class="img-fluid" alt="logo" style="width: 50px;"> 
+                </center>
+            </form>
+        </div>
+    </body>
+    </html>
+    
+
+
+
+
+
+
+
+
+  <script type="text/javascript" src="  {% static 'js/jquery-3.4.1.min.js' %}
+  "></script>
+  <script type="text/javascript" src="  {% static 'js/bootstrap.js' %}
+  "></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- owl carousel script 
+    -->
+  <script type="text/javascript">
+    $(".owl-carousel").owlCarousel({
+      loop: true,
+      margin: 0,
+      navText: [],
+      center: true,
+      autoplay: true,
+      autoplayHoverPause: true,
+      responsive: {
+        0: {
+          items: 1
+        },
+        1000: {
+          items: 3
+        }
+      }
+    });
+  </script>
+  <!-- end owl carousel script -->
+</body>
+
+</html>
