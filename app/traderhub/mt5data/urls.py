@@ -1,7 +1,7 @@
 from django.urls import path ,include
-from .views import fetch_mt5_15min, fetch_2025_15min, fetch_latest_15min,home,user_login,register,loading,how,about,dashboard,preferences,update_preferences,profile,sentiment_analysis,trading_strategies,allcourses
+from .views import fetch_mt5_15min, fetch_2025_15min, fetch_latest_15min,home,user_login,register,loading,how,about,dashboard,preferences,update_preferences,profile,sentiment_analysis,trading_strategies,allcourses,chat_interface,market_insights,close_trade
 from django.contrib.auth.views import LogoutView
-
+from django.contrib import admin
 
 urlpatterns = [
     path('fetch-15min/', fetch_mt5_15min, name='fetch_mt5_15min'),
@@ -21,14 +21,9 @@ urlpatterns = [
     path('trading-strategies/', trading_strategies, name='trading_strategies'),
     path('allcourses/', allcourses, name='allcourses'),
     path('loading/', loading, name='loading'),
-
-
-
-
-    path('portfolio-analysis/', fetch_mt5_15min, name='portfolio_analysis'),
-    path('market-insights/', fetch_mt5_15min, name='market_insights'),
-    path('sector_details/<str:sector_name>/', fetch_mt5_15min, name='sector_details'),
-    path('company_details/<str:company_name>/', fetch_mt5_15min, name='company_details'),
-    path('chat/', fetch_mt5_15min, name='chat'),
-    path('company_portfolio/<str:company_name>/', fetch_mt5_15min, name='company_portfolio'),
+    path('chat/', chat_interface, name='chat'),
+    path('market-insights/', market_insights, name='market_insights'),
+    path('close_trade/<int:trade_id>/', close_trade, name='close_trade'),
+    path('admin/', admin.site.urls),
+    path('', include('pwa.urls'))  
 ]

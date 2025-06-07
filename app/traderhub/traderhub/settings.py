@@ -23,12 +23,14 @@ SECRET_KEY = 'django-insecure-sy88^q+h@51er2t+ypcw7r!6w1+u!2ztep^h0q1hzg**c*j677
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.101','192.168.1.206','172.16.1.255']
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.103.4']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'django_apscheduler',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -51,42 +53,44 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'mt5data.urls'
-# settings.py
 
-# settings.py
-
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static', 'serviceworker.js')
-
-PWA_APP_NAME = 'My Django App'
-PWA_APP_DESCRIPTION = "My Django Application"
-PWA_APP_THEME_COLOR = '#0A0302'
-PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_NAME = 'Infinitrade'
+PWA_APP_SHORT_NAME = 'Trade'
+PWA_APP_DESCRIPTION = "Your Forex trading companion."
+PWA_APP_THEME_COLOR = '#0A0A0A'
+PWA_APP_BACKGROUND_COLOR = '#FFFFFF'
 PWA_APP_DISPLAY = 'standalone'
 PWA_APP_SCOPE = '/'
-PWA_APP_ORIENTATION = 'any'
+PWA_APP_ORIENTATION = 'portrait'
 PWA_APP_START_URL = '/'
 PWA_APP_STATUS_BAR_COLOR = 'default'
 PWA_APP_ICONS = [
     {
-        'src': '/static/images/myicon.png',
-        'sizes': '160x160'
+        'src': '/static/images/infinitrade.png',
+        'sizes': '192x192'
+    },
+    {
+        'src': '/static/images/infinitrade.png',
+        'sizes': '512x512'
     }
 ]
 PWA_APP_ICONS_APPLE = [
     {
-        'src': '/static/images/myappleicon.png',
-        'sizes': '160x160'
+        'src': '/static/images/icon-192.png',
+        'sizes': '192x192'
+    },
+    {
+        'src': '/static/images/icon-512.png',
+        'sizes': '512x512'
     }
 ]
 PWA_APP_SPLASH_SCREEN = [
     {
-        'src': '/static/images/mysplashscreen.png',
-        'sizes': '640x1136',
-        'type': 'image/png'
+        'src': '/static/images/splash.png',
+        'media': '(device-width: 320px) and (device-height: 640px)'
     }
 ]
-PWA_APP_DIR = 'ltr'
-PWA_APP_LANG = 'en-US'
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
 
 TEMPLATES = [
     {

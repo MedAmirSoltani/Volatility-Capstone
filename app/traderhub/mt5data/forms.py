@@ -27,7 +27,7 @@ class CustomUserChangeForm(forms.ModelForm):
 class PreferencesForm(forms.ModelForm):
     class Meta:
         model = Preferences
-        fields = ['risk_tolerance', 'investment_horizon', 'investment_objective', 'knowledge_experience', 'sectors', 'available_funds']
+        fields = ['risk_tolerance', 'investment_horizon', 'investment_objective', 'knowledge_experience',  'available_funds']
 
 from .models import ForumTopic, ForumComment
 

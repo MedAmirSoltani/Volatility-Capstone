@@ -5,7 +5,7 @@ import MetaTrader5 as mt5
 from datetime import datetime
 import pandas as pd
 from datetime import datetime, timedelta
-from .models import MT5Candle,Preferences
+from .models import MT5Candle,Preferences,Trade
 from django.utils import timezone
 from .forms import CustomUserCreationForm, CustomAuthenticationForm,CustomUserChangeForm,PreferencesForm
 from django.shortcuts import render, redirect
@@ -15,7 +15,8 @@ from plotly.offline import plot
 from django.conf import settings
 import os
 import joblib
-
+from django.shortcuts import get_object_or_404
+from decimal import Decimal
 
 
 import requests
@@ -175,8 +176,7 @@ def home(request):
     plot_type = request.GET.get('plot_type', 'candlestick')
 
     # Get last 50 points for EURUSD
-    candles = MT5Candle.objects.filter(symbol="EURUSD").order_by('-time')[:50][::-1]
-
+    candles = MT5Candle.objects.filter(symbol="EURUSD").order_by('-time')[:96][::-1]
     timestamps = [c.time.strftime('%Y-%m-%d %H:%M') for c in candles]
     open_prices = [c.open for c in candles]
     high_prices = [c.high for c in candles]
@@ -249,6 +249,55 @@ def how(request):
     return render(request, 'how.html')
 def about(request):
     return render(request, 'about.html')
+
+
+
+
+
+import requests
+
+def call_mistral_summary(volatility_values, sentiment_summary):
+    # Format the input data for LLM
+    volatility_trend = f"{[round(v, 3) for v in volatility_values[-5:]]}"
+
+    prompt = f"""
+You are a professional financial assistant specialized in Forex market analysis.
+
+You are provided with:
+- The latest predicted volatility values for EUR/USD: {volatility_trend}
+- Recent news sentiment analysis:
+  • Positive: {sentiment_summary['positive']}%
+  • Neutral: {sentiment_summary['neutral']}%
+  • Negative: {sentiment_summary['negative']}%
+
+Your task is to:
+1. Summarize the current market conditions in a clear and concise way.
+2. Provide a **trading recommendation** (Buy, Sell, or Hold) with a short justification based on the analysis.
+
+Write like a senior analyst giving guidance to a trader. Be objective and actionable.
+"""
+
+    headers = {
+        "Authorization": "Bearer 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",
+        "Content-Type": "application/json"
+    }
+
+    data = {
+        "model": "mistral-saba-24b",
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.3,
+        "max_tokens": 500
+    }
+
+    try:
+        response = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=data)
+        return response.json()["choices"][0]["message"]["content"]
+    except Exception as e:
+        return "Erreur lors de l'analyse LLM : " + str(e)
+
+
+
+
 
 
 def dashboard(request):
@@ -372,8 +421,10 @@ def dashboard(request):
         'neutral': round(neutral_count / total * 100, 1),
         'negative': round(neg_count / total * 100, 1),
     }
+    llm_summary = call_mistral_summary(predictions, sentiment_summary)
 
     context = {
+        'llm_summary': llm_summary,  
         'sentiment_summary': sentiment_summary,
         'plotly_chart': fig.to_json(),
         'open_price': latest_point.open,
@@ -591,11 +642,216 @@ def allcourses(request):
     return render(request, 'allcourses.html', {'trading_strategies_info': trading_strategies_info})
 
 
+import requests
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+
+@csrf_exempt
+def chat_interface(request):
+    if request.method == "POST":
+        user_message = request.POST.get("message", "")
+        if not user_message:
+            return JsonResponse({"response": "Please enter a message."})
+
+        # Prepare Groq LLM call
+        prompt = f"""
+You are ArtSmart, a finance chatbot created by Amir Soltani.
+You specialize in trading, with a primary focus on Forex. Respond in a professional, clear, and helpful manner to the following user query:
+
+User: "{user_message}"
+ArtSmart:"""
+
+        headers = {
+            "Authorization": "Bearer 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",
+            "Content-Type": "application/json"
+        }
+
+        data = {
+            "model": "mistral-saba-24b",
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.4,
+            "max_tokens": 1000,
+            
+        }
+
+        try:
+            response = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=data)
+            reply = response.json()["choices"][0]["message"]["content"]
+        except Exception as e:
+            reply = f"⚠️ An error occurred while fetching response: {str(e)}"
+
+        return JsonResponse({"response": reply})
+
+    return render(request, "chat.html")
 
 
 
 
+import numpy as np
+import pandas as pd
+
+def market_insights(request):
+    plot_type = request.GET.get('plot_type', 'candlestick')
+    deviation_options = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+
+    # Indicator toggles from frontend
+    show_ma10 = request.GET.get('show_ma10') == 'on'
+    show_ma30 = request.GET.get('show_ma30') == 'on'
+    show_rsi = request.GET.get('show_rsi') == 'on'
+    show_macd = request.GET.get('show_macd') == 'on'
+
+    candles = MT5Candle.objects.filter(symbol="EURUSD").order_by('-time')[:96][::-1]
+
+    df = pd.DataFrame({
+        'timestamp': [c.time for c in candles],
+        'open': [c.open for c in candles],
+        'high': [c.high for c in candles],
+        'low': [c.low for c in candles],
+        'close': [c.close for c in candles],
+        'volume': [c.tick_volume for c in candles]
+    })
+
+    traces = []
+
+    if plot_type == "line":
+        traces.append(go.Scatter(x=df['timestamp'], y=df['close'], mode='lines+markers', name='Close Price'))
+    elif plot_type == "ohlc":
+        traces.append(go.Ohlc(x=df['timestamp'], open=df['open'], high=df['high'], low=df['low'], close=df['close'], name='OHLC'))
+    elif plot_type == "volume":
+        traces.append(go.Bar(x=df['timestamp'], y=df['volume'], name='Volume', marker_color='orange'))
+    else:
+        traces.append(go.Candlestick(x=df['timestamp'], open=df['open'], high=df['high'], low=df['low'], close=df['close'], name='Candlestick'))
+
+    # ➕ Add indicators if selected
+    if show_ma10:
+        df['ma10'] = df['close'].rolling(window=10).mean()
+        traces.append(go.Scatter(x=df['timestamp'], y=df['ma10'], mode='lines', name='MA10', line=dict(color='blue', dash='dot')))
+    if show_ma30:
+        df['ma30'] = df['close'].rolling(window=30).mean()
+        traces.append(go.Scatter(x=df['timestamp'], y=df['ma30'], mode='lines', name='MA30', line=dict(color='green', dash='dash')))
+    if show_rsi:
+        delta = df['close'].diff()
+        gain = np.where(delta > 0, delta, 0)
+        loss = np.where(delta < 0, -delta, 0)
+        avg_gain = pd.Series(gain).rolling(window=14).mean()
+        avg_loss = pd.Series(loss).rolling(window=14).mean()
+        rs = avg_gain / avg_loss
+        df['rsi'] = 100 - (100 / (1 + rs))
+        traces.append(go.Scatter(x=df['timestamp'], y=df['rsi'], mode='lines', name='RSI', yaxis='y2', line=dict(color='purple')))
+
+    if show_macd:
+        ema12 = df['close'].ewm(span=12, adjust=False).mean()
+        ema26 = df['close'].ewm(span=26, adjust=False).mean()
+        df['macd'] = ema12 - ema26
+        signal = df['macd'].ewm(span=9, adjust=False).mean()
+        traces.append(go.Scatter(x=df['timestamp'], y=df['macd'], mode='lines', name='MACD', yaxis='y2', line=dict(color='red')))
+        traces.append(go.Scatter(x=df['timestamp'], y=signal, mode='lines', name='Signal', yaxis='y2', line=dict(color='orange')))
+
+    layout = go.Layout(
+        title=f'{plot_type.capitalize()} Chart for EUR/USD',
+        xaxis=dict(title='Time', rangeslider=dict(visible=(plot_type in ["candlestick", "ohlc"]))),
+        yaxis=dict(title='Price'),
+        height=600
+    )
+
+    if show_rsi or show_macd:
+        layout.update(yaxis2=dict(title='RSI / MACD', overlaying='y', side='right'))
+
+    fig = go.Figure(data=traces, layout=layout)
+    plot_div = plot(fig, output_type='div', include_plotlyjs=True)
+
+    # Order execution logic
+    message = None
+    user_prefs = Preferences.objects.first()
+
+    if request.method == 'POST':
+        volume = Decimal(request.POST.get('volume', '0') or '0')
+        action = request.POST.get('action')
+
+        if not user_prefs:
+            message = "⚠️ Preferences not set."
+        else:
+            price = Decimal(str(df['close'].iloc[-1])) if not df.empty else Decimal('0')
+            cost = price * volume
+
+            if action == 'buy':
+                if user_prefs.available_funds >= cost:
+                    user_prefs.available_funds -= cost
+                    user_prefs.save()
+                    Trade.objects.create(user=request.user, action='buy', volume=volume, price=price, time=timezone.now(), profit=Decimal('0.00'), closed=False)
+                    message = f"✅ Buy order executed for {volume} lots at {price:.5f}"
+                else:
+                    message = "❌ Insufficient funds to execute buy order."
+            elif action == 'sell':
+                user_prefs.available_funds += cost
+                user_prefs.save()
+                Trade.objects.create(user=request.user, action='sell', volume=volume, price=price, time=timezone.now(), profit=Decimal('0.00'), closed=False)
+                message = f"✅ Sell order executed for {volume} lots at {price:.5f}"
+            else:
+                message = "⚠️ Invalid action."
+
+    trade_history = Trade.objects.filter(user=request.user).order_by('-time')
+    bid, ask = get_live_bid_ask()
+
+    return render(request, 'market_insights.html', {
+        'plot_div': plot_div,
+        'selected_type': plot_type,
+        'deviation_options': deviation_options,
+        'message': message,
+        'available_funds': user_prefs.available_funds if user_prefs else 0,
+        'bid': bid,
+        'ask': ask,
+        'trade_history': trade_history,
+        'show_ma10': show_ma10,
+        'show_ma30': show_ma30,
+        'show_rsi': show_rsi,
+        'show_macd': show_macd
+    })
 
 
 
+def close_trade(request, trade_id):
+    trade = get_object_or_404(Trade, id=trade_id, user=request.user, closed=False)
+    user_prefs = trade.user.preferences
 
+    if trade.action == 'buy':
+        # Simulate sell at current price (no price update logic for simplicity)
+        close_price = trade.price
+        profit = close_price * trade.volume  # You can improve this with real pricing
+        user_prefs.available_funds += profit
+    elif trade.action == 'sell':
+        cost = trade.price * trade.volume
+        user_prefs.available_funds -= cost
+
+    trade.closed = True
+    trade.profit = profit if trade.action == 'buy' else -cost
+    trade.save()
+    user_prefs.save()
+
+    return redirect('market_insights')
+
+
+import requests
+
+
+from decimal import Decimal
+
+def get_live_bid_ask():
+    url = "https://api.twelvedata.com/quote"
+    params = {"symbol": "EUR/USD", "apikey": "48c496e7db274bcfb713f0cd8897cd56"}
+    try:
+        response = requests.get(url, params=params, timeout=5)
+        data = response.json()
+
+        if 'bid' in data and 'ask' in data:
+            return Decimal(data['bid']), Decimal(data['ask'])
+
+        # Fallback: simulate bid/ask from close
+        if 'close' in data:
+            close = Decimal(data['close'])
+            return close - Decimal('0.0002'), close + Decimal('0.0002')
+    except Exception as e:
+        print("❌ get_live_bid_ask error:", e)
+
+    return None, None

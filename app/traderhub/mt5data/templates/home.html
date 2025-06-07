@@ -1,4 +1,13 @@
 {% load static %}
+<link rel="manifest" href="{% url 'manifest' %}">
+<meta name="theme-color" content="#0A0A0A">
+
+<link rel="apple-touch-icon" href="{% static 'images/icon-192.png' %}">
+<meta name="apple-mobile-web-app-capable" content="yes">
+{% load static %}
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-touch-icon.png' %}">
+<link rel="apple-touch-icon-precomposed" href="{% static 'apple-touch-icon-precomposed.png' %}">
+<link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
 
 <!DOCTYPE html>
 <html>
@@ -349,7 +358,7 @@
           </div>
         </a>
         {% if user.is_authenticated %}
-        <a href="{% url 'portfolio_analysis' %}" class="box">
+        <a href="{% url 'chat' %}" class="box">
           {% else %}
           <a href="{% url 'login' %}" class="box">
             {% endif %}
@@ -363,13 +372,12 @@
               </svg>
             </div>
             <div class="detail-box">
-              <h5 style="color:#0056b3">
-                Portfolio Analysis
-              </h5>
-              <p>
-                Gain insights into your investment portfolio's performance and optimize your strategy for maximum
-                returns.
-              </p>
+          <h5 style="color:#0056b3">
+            Talk to ArtSmart
+          </h5>
+          <p>
+             ArtSmart answers your trading and portfolio questions in real time. Ask anything about Forex, strategy, or market trends.
+          </p>
             </div>
 
           </a>
@@ -432,13 +440,12 @@
                   </svg>
                 </div>
                 <div class="detail-box">
-                  <h5 style="color:#0056b3">
-                    Market Insights
-                  </h5>
-                  <p>
-                    Stay informed with the latest market trends, analysis, and news to make strategic investment
-                    decisions.
-                  </p>
+            <h5 style="color:#0056b3">
+              Trading Simulator
+            </h5>
+   <p>
+Experience a professional trading environment with real-time Forex data, interactive charts, and technical indicators.
+</p>
                 </div>
               </a>
     </div>

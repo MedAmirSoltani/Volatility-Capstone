@@ -336,10 +336,9 @@
 }
 
 .tunindex-text {
-    font-size: 16px; /* Standard readable font size */
-    line-height: 1.5; /* Adequate line height for readability */
-    color: #333; /* Dark grey text for better readability */
-    text-align: justify; /* Justified text for a clean look */
+  font-size: 16px;
+  line-height: 1.6;
+  white-space: pre-line;
 }
 form {
             margin-bottom: 20px;
@@ -373,11 +372,13 @@ form {
       </h1>
                 
 <div class="tunindex-container">
-  <div class="tunindex-title">About Volatility</div>
+  <div class="tunindex-title">🤖 Analyse par Intelligence Artificielle</div>
   <p class="tunindex-text">
-    Volatility measures the degree of variation in asset prices over time, often reflecting market uncertainty or investor sentiment. In financial markets, higher volatility typically signals larger price swings and increased risk. Monitoring volatility helps traders and analysts assess market stability, identify trends, and develop strategies for risk management and prediction.
+    {{ llm_summary|safe }}
   </p>
 </div>
+
+
            <br>  
                         <!-- Some key metrics about the index -->
 <div class="index-metrics">
