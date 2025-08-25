@@ -273,7 +273,7 @@ You are provided with:
 Your task is to:
 1. Summarize the current market conditions in a clear and concise way.
 2. Provide a **trading recommendation** (Buy, Sell, or Hold) with a short justification based on the analysis.
-
+dont answer with tables
 Write like a senior analyst giving guidance to a trader. Be objective and actionable.
 """
 
@@ -283,7 +283,7 @@ Write like a senior analyst giving guidance to a trader. Be objective and action
     }
 
     data = {
-        "model": "mistral-saba-24b",
+        "model": "openai/gpt-oss-120b",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.3,
         "max_tokens": 500
@@ -657,7 +657,7 @@ def chat_interface(request):
         # Prepare Groq LLM call
         prompt = f"""
 You are ArtSmart, a finance chatbot created by Amir Soltani.
-You specialize in trading, with a primary focus on Forex. Respond in a professional, clear, and helpful manner to the following user query:
+You specialize in trading, with a primary focus on Forex (dont answer with tables). Respond in a professional, clear, and helpful manner to the following user query:
 
 User: "{user_message}"
 ArtSmart:"""
@@ -668,7 +668,7 @@ ArtSmart:"""
         }
 
         data = {
-            "model": "mistral-saba-24b",
+            "model": "openai/gpt-oss-120b",
             "messages": [{"role": "user", "content": prompt}],
             "temperature": 0.4,
             "max_tokens": 1000,
