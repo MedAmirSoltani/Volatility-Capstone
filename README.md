@@ -6,7 +6,7 @@
 <img src="https://img.shields.io/badge/app-Django-00897B?style=for-the-badge&logo=django&logoColor=white"/>
 
 # 📈 Forex Volatility Forecasting
-### GARCH(4,4) vs XGBoost — 15-Minute High-Frequency Data
+### GARCH vs XGBoost — 15-Minute High-Frequency Data
 
 > *Can a machine learning model beat a 40-year-old econometric standard?*
 > *Short answer: yes — by half.*
